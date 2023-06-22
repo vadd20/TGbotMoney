@@ -5,22 +5,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-public class StartButtons {
-    // кнопки с текстом
-    private static final InlineKeyboardButton ADD_BUTTON = new InlineKeyboardButton("Add");
-    private static final InlineKeyboardButton STATS_BUTTON = new InlineKeyboardButton("Stats");
+public class CheckSumButtons {
 
-    // функция, возвращающая объект разметки клавиатуры
+    private static final InlineKeyboardButton CONTINUE_BUTTON = new InlineKeyboardButton("Continue");
+    private static final InlineKeyboardButton AGAIN_BUTTON = new InlineKeyboardButton("Enter again");
+
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {
-        ADD_BUTTON.setCallbackData("/add");
-        STATS_BUTTON.setCallbackData("/stats");
+        CONTINUE_BUTTON.setCallbackData("/continueCheckSum");
+        AGAIN_BUTTON.setCallbackData("/againCheckSum");
+
         return getInlineKeyboardMarkup();
     }
 
     private static InlineKeyboardMarkup getInlineKeyboardMarkup() {
-        // ряд кнопок
-        List<InlineKeyboardButton> rowInline = List.of(ADD_BUTTON, STATS_BUTTON);
-        // несколько рядов кнопок (клавиатура)
+        List<InlineKeyboardButton> rowInline = List.of(CONTINUE_BUTTON, AGAIN_BUTTON);
         List<List<InlineKeyboardButton>> rowsInline = List.of(rowInline);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();

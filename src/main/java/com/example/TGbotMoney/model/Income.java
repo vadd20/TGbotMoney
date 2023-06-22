@@ -7,14 +7,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "expense")
-public class Expense {
+@Table(name = "income")
+public class Income {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long expense_id;
+    private long income_id;
     private long user_id;
     private LocalDateTime date;
     private String category;
     private int sum;
 }
-
