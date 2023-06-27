@@ -19,7 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.List;
+import java.util.Locale;
 
 
 @Component
@@ -124,15 +130,128 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
 
             case "/backWhenChooseCategory" -> addRecord(chatId);
 
+            case "/showDayStats" -> showStatsForDay(userId, chatId, messageId);
+            case "/showWeekStats" -> showStatsForCurrentWeek(userId, chatId, messageId);
+            case "/showMonthStats" -> showStatsForCurrentMonth(userId, chatId, messageId);
+            case "/showYearStats" -> showStatsForCurrentYear(userId, chatId, messageId);
+            case "/showAllTimeStats" -> showStatsForAllTime(userId, chatId, messageId);
+
             default -> sendDefaultMessage(chatId);
         }
+    }
+
+    private void showStatsForAllTime(long userId, long chatId, int messageId) {
+        LocalDateTime startOfLife = LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0);
+
+        String messageText = getTextStatsForPeriod(userId, startOfLife);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(String.valueOf(chatId));
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText("Stats for all time:\n" + messageText);
+
+        try {
+            execute(editMessageText);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void showStatsForCurrentYear(long userId, long chatId, int messageId) {
+        LocalDateTime startOfYear = LocalDateTime.now().toLocalDate().atStartOfDay().withDayOfYear(1);
+
+        String messageText = getTextStatsForPeriod(userId, startOfYear);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(String.valueOf(chatId));
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText("Stats for current year:\n" + messageText);
+
+        try {
+            execute(editMessageText);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void showStatsForCurrentMonth(long userId, long chatId, int messageId) {
+        LocalDateTime startOfMonth = LocalDateTime.now().toLocalDate().atStartOfDay().withDayOfMonth(1);
+
+        String messageText = getTextStatsForPeriod(userId, startOfMonth);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(String.valueOf(chatId));
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText("Stats for current month:\n" + messageText);
+
+        try {
+            execute(editMessageText);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void showStatsForDay(long userId, long chatId, int messageId) {
+        LocalDateTime startOfToday = LocalDateTime.now().toLocalDate().atStartOfDay();
+
+        String messageText = getTextStatsForPeriod(userId, startOfToday);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(String.valueOf(chatId));
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText("Stats for today:\n" + messageText);
+
+        try {
+            execute(editMessageText);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void showStatsForCurrentWeek(long userId, long chatId, int messageId) {
+        LocalDateTime startOfWeek = LocalDateTime.now().toLocalDate().atStartOfDay().with(DayOfWeek.MONDAY);
+
+        String messageText = getTextStatsForPeriod(userId, startOfWeek);
+
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(String.valueOf(chatId));
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText("Stats for current week:\n" + messageText);
+
+        try {
+            execute(editMessageText);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private String getTextStatsForPeriod(long userId, LocalDateTime date) {
+        List<Expense> weekExpenses = expenseRepository.findAllAfterDate(userId, date);
+        List<Income> weekIncomes = incomeRepository.findAllAfterDate(userId, date);
+
+        StringBuilder statsForPeriod = new StringBuilder();
+
+        for (Expense expense : weekExpenses) {
+            statsForPeriod.append(expense.toString()).append("\n");
+        }
+
+        for (Income income : weekIncomes) {
+            statsForPeriod.append(income.toString()).append("\n");
+        }
+
+        return statsForPeriod.toString();
     }
 
     private void addIncomeInDB(long userId, IncomeCategory category, long chatId, int messageId) {
         Income income = new Income();
         income.setUser_id(userId);
         income.setDate(LocalDateTime.now());
-        income.setCategory(category.name());
+        income.setCategory(category.toString());
         income.setSum(sum);
         incomeRepository.saveAndFlush(income);
 
@@ -156,7 +275,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         Expense expense = new Expense();
         expense.setUser_id(userId);
         expense.setDate(LocalDateTime.now());
-        expense.setCategory(category.name());
+        expense.setCategory(category.toString());
         expense.setSum(sum);
         expenseRepository.saveAndFlush(expense);
 
@@ -234,6 +353,17 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     }
 
     private void showStats(long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chatId));
+        sendMessage.setText("Choose period of statistics");
+        sendMessage.setReplyMarkup(PeriodsButtons.inlineKeyboardMarkup());
+
+        try {
+            execute(sendMessage);
+            log.info("Sent");
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
     }
 
 
