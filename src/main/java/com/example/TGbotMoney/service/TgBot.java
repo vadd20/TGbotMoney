@@ -1,9 +1,9 @@
 package com.example.TGbotMoney.service;
 
-import com.example.TGbotMoney.components.buttons.*;
-import com.example.TGbotMoney.model.*;
 import com.example.TGbotMoney.components.BotCommands;
+import com.example.TGbotMoney.components.buttons.*;
 import com.example.TGbotMoney.config.BotConfig;
+import com.example.TGbotMoney.model.*;
 import com.example.TGbotMoney.repository.ExpenseRepository;
 import com.example.TGbotMoney.repository.IncomeRepository;
 import com.example.TGbotMoney.repository.UserRepository;
@@ -22,19 +22,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.Locale;
 
 
 @Component
 @Slf4j
 public class TgBot extends TelegramLongPollingBot implements BotCommands {
-    private BotConfig config;
-    private UserRepository userRepository;
-    private ExpenseRepository expenseRepository;
-    private IncomeRepository incomeRepository;
+    private final BotConfig config;
+    private final UserRepository userRepository;
+    private final ExpenseRepository expenseRepository;
+    private final IncomeRepository incomeRepository;
     private int sum;
     private long userId;
     private String userName;
@@ -53,23 +50,10 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         }
     }
 
-    private void updateDB(long userId, String userName) {
-        if (userRepository.findById(userId).isEmpty()) {
-            User user = new User();
-            user.setId(userId);
-            user.setName(userName);
-
-            userRepository.save(user);
-            log.info("added to db:" + user);
-        } else {
-            log.info("this id in db");
-        }
-    }
-
     @Override
     public void onUpdateReceived(@NotNull Update update) {
-        long chatId = 0;
-        int messageId = 0;
+        long chatId;
+        int messageId;
         String receivedMessage;
         if (update.hasMessage()) {
             if (update.getMessage().hasText()) {
@@ -92,7 +76,6 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
             messageId = update.getCallbackQuery().getMessage().getMessageId();
             botAnswerUtils(receivedMessage, chatId, userName, userId, messageId);
         }
-        updateDB(userId, userName);
     }
 
     private void botAnswerUtils(String receivedMessage, long chatId, String userName, long userId, int messageId) {
@@ -148,7 +131,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Stats for all time:\n" + messageText);
+        editMessageText.setText("Stats for all time:\n\n" + messageText);
 
         try {
             execute(editMessageText);
@@ -166,7 +149,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Stats for current year:\n" + messageText);
+        editMessageText.setText("Stats for current year:\n\n" + messageText);
 
         try {
             execute(editMessageText);
@@ -184,7 +167,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Stats for current month:\n" + messageText);
+        editMessageText.setText("Stats for current month:\n\n" + messageText);
 
         try {
             execute(editMessageText);
@@ -202,7 +185,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Stats for today:\n" + messageText);
+        editMessageText.setText("Stats for today:\n\n" + messageText);
 
         try {
             execute(editMessageText);
@@ -220,7 +203,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Stats for current week:\n" + messageText);
+        editMessageText.setText("Stats for current week:\n\n" + messageText);
 
         try {
             execute(editMessageText);
@@ -231,16 +214,17 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     }
 
     private String getTextStatsForPeriod(long userId, LocalDateTime date) {
-        List<Expense> weekExpenses = expenseRepository.findAllAfterDate(userId, date);
-        List<Income> weekIncomes = incomeRepository.findAllAfterDate(userId, date);
+        List<Expense> expensesSinceDate = expenseRepository.findAllAfterDate(userId, date);
+        List<Income> incomesSinceDate = incomeRepository.findAllAfterDate(userId, date);
 
         StringBuilder statsForPeriod = new StringBuilder();
 
-        for (Expense expense : weekExpenses) {
+        for (Expense expense : expensesSinceDate) {
             statsForPeriod.append(expense.toString()).append("\n");
         }
+        statsForPeriod.append("\n");
 
-        for (Income income : weekIncomes) {
+        for (Income income : incomesSinceDate) {
             statsForPeriod.append(income.toString()).append("\n");
         }
 
@@ -258,7 +242,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Added to income: " + category + " - " + sum);
+        editMessageText.setText("Added to income: " + category + " — " + sum);
         editMessageText.setReplyMarkup(StartButtons.inlineKeyboardMarkup());
 
         try {
@@ -282,7 +266,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Added to expense: " + category + " - " + sum);
+        editMessageText.setText("Added to expense: " + category + " — " + sum);
         editMessageText.setReplyMarkup(StartButtons.inlineKeyboardMarkup());
 
         try {
@@ -298,7 +282,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void enterSum(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Enter sum to order");
+        sendMessage.setText("Enter amount of income or expense:");
 
         try {
             execute(sendMessage);
@@ -311,7 +295,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void isCorrectSum(long chatId, int sum) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Your sum is " + sum + ". Click next to continue");
+        sendMessage.setText("Your amount is " + sum + ". Click Continue to choose category.");
         sendMessage.setReplyMarkup(CheckSumButtons.inlineKeyboardMarkup());
 
         try {
@@ -326,7 +310,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Choose category you want to add for income");
+        editMessageText.setText("Choose category you want to add for Income:");
         editMessageText.setReplyMarkup(IncomeCategoryButtons.inlineKeyboardMarkup());
 
         try {
@@ -341,7 +325,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(String.valueOf(chatId));
         editMessageText.setMessageId(messageId);
-        editMessageText.setText("Choose category you want to add for expense");
+        editMessageText.setText("Choose category you want to add for Expense:");
         editMessageText.setReplyMarkup(ExpenseCategoryButtons.inlineKeyboardMarkup());
 
         try {
@@ -355,7 +339,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void showStats(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Choose period of statistics");
+        sendMessage.setText("Choose period of statistics:");
         sendMessage.setReplyMarkup(PeriodsButtons.inlineKeyboardMarkup());
 
         try {
@@ -370,7 +354,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void addRecord(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Choose what you want to add");
+        sendMessage.setText("Choose what you want to add:");
         sendMessage.setReplyMarkup(AddButtons.inlineKeyboardMarkup());
 
         try {
@@ -384,7 +368,7 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void sendDefaultMessage(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText("Choose from available");
+        sendMessage.setText("\uD83C\uDF27 Неизвестная команда");
         try {
             execute(sendMessage);
             log.info("Sent");
@@ -408,7 +392,8 @@ public class TgBot extends TelegramLongPollingBot implements BotCommands {
     private void startBot(Long chatId, String userName) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText("Hello, " + userName + ". I am finance bot by @vadd20");
+        sendMessage.setText("Hello, " + userName + ". I am financial bot by @vadd20\n" +
+                "Here you can keep track of your incomes and expenses and view statistics.");
         sendMessage.setReplyMarkup(StartButtons.inlineKeyboardMarkup());
 
         try {

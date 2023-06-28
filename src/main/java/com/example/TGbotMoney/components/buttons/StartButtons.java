@@ -7,8 +7,8 @@ import java.util.List;
 
 public class StartButtons {
     // кнопки с текстом
-    private static final InlineKeyboardButton ADD_BUTTON = new InlineKeyboardButton("Add");
-    private static final InlineKeyboardButton STATS_BUTTON = new InlineKeyboardButton("Stats");
+    private static final InlineKeyboardButton ADD_BUTTON = new InlineKeyboardButton("➕ Add");
+    private static final InlineKeyboardButton STATS_BUTTON = new InlineKeyboardButton("\uD83D\uDCCA Stats");
 
     // функция, возвращающая объект разметки клавиатуры
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {

@@ -7,18 +7,18 @@ import java.util.List;
 
 public class ExpenseCategoryButtons {
 
-    private static final InlineKeyboardButton FOOD_BUTTON = new InlineKeyboardButton("Food");
-    private static final InlineKeyboardButton CLOTHING_AND_COSMETICS_BUTTON = new InlineKeyboardButton("Clothe&cosmetics");
-    private static final InlineKeyboardButton COMMUNAL_BUTTON = new InlineKeyboardButton("Communal");
-    private static final InlineKeyboardButton TRANSPORT_BUTTON = new InlineKeyboardButton("Transport");
-    private static final InlineKeyboardButton EDUCATION_BUTTON = new InlineKeyboardButton("Education");
-    private static final InlineKeyboardButton ENTERTAINMENT_BUTTON = new InlineKeyboardButton("Entertainment");
-    private static final InlineKeyboardButton APPLIANCES_BUTTON = new InlineKeyboardButton("Appliances");
-    private static final InlineKeyboardButton MEDICINE_BUTTON = new InlineKeyboardButton("Medicine");
-    private static final InlineKeyboardButton SOCIAL_BUTTON = new InlineKeyboardButton("Social");
-    private static final InlineKeyboardButton INVESTMENTS_BUTTON = new InlineKeyboardButton("Investments");
-    private static final InlineKeyboardButton OTHER_BUTTON = new InlineKeyboardButton("Other");
-    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("Back");
+    private static final InlineKeyboardButton FOOD_BUTTON = new InlineKeyboardButton("\uD83E\uDD66 Food");
+    private static final InlineKeyboardButton CLOTHING_AND_COSMETICS_BUTTON = new InlineKeyboardButton("\uD83E\uDDE5 Clothe&cosmetics");
+    private static final InlineKeyboardButton COMMUNAL_BUTTON = new InlineKeyboardButton("\uD83D\uDCA1 Communal");
+    private static final InlineKeyboardButton TRANSPORT_BUTTON = new InlineKeyboardButton("\uD83D\uDE97 Transport");
+    private static final InlineKeyboardButton EDUCATION_BUTTON = new InlineKeyboardButton("\uD83D\uDCDA Education");
+    private static final InlineKeyboardButton ENTERTAINMENT_BUTTON = new InlineKeyboardButton("\uD83C\uDF89 Entertainment");
+    private static final InlineKeyboardButton APPLIANCES_BUTTON = new InlineKeyboardButton("\uD83D\uDD0C Appliances");
+    private static final InlineKeyboardButton MEDICINE_BUTTON = new InlineKeyboardButton("\uD83D\uDC8A Medicine");
+    private static final InlineKeyboardButton SOCIAL_BUTTON = new InlineKeyboardButton("\uD83E\uDD1D Social");
+    private static final InlineKeyboardButton INVESTMENTS_BUTTON = new InlineKeyboardButton("\uD83D\uDCC8 Investments");
+    private static final InlineKeyboardButton OTHER_BUTTON = new InlineKeyboardButton("\uD83C\uDF1F Other");
+    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("↩️ Back");
 
 
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {

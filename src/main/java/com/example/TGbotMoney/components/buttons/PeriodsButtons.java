@@ -10,10 +10,9 @@ public class PeriodsButtons {
     private static final InlineKeyboardButton DAY_BUTTON = new InlineKeyboardButton("Day");
     private static final InlineKeyboardButton WEEK_BUTTON = new InlineKeyboardButton("Week");
     private static final InlineKeyboardButton MONTH_BUTTON = new InlineKeyboardButton("Month");
-    private static final InlineKeyboardButton THREE_MONTHS_BUTTON = new InlineKeyboardButton("3 Months");
     private static final InlineKeyboardButton ONE_YEAR_BUTTON = new InlineKeyboardButton("Year");
     private static final InlineKeyboardButton ALL_TIME_BUTTON = new InlineKeyboardButton("All time");
-    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("Back");
+    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("↩️ Back");
 
 
 

@@ -6,12 +6,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 public class IncomeCategoryButtons {
-    private static final InlineKeyboardButton MAIN_JOB_BUTTON = new InlineKeyboardButton("Main job");
-    private static final InlineKeyboardButton PART_TIME_JOB_BUTTON = new InlineKeyboardButton("Part-time job");
-    private static final InlineKeyboardButton GIFT_BUTTON = new InlineKeyboardButton("Gift");
-    private static final InlineKeyboardButton CASHBACK = new InlineKeyboardButton("Cashback");
-    private static final InlineKeyboardButton INVESTMENTS_BUTTON = new InlineKeyboardButton("Investments");
-    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("Back");
+    private static final InlineKeyboardButton MAIN_JOB_BUTTON = new InlineKeyboardButton("\uD83D\uDCBC Main job");
+    private static final InlineKeyboardButton PART_TIME_JOB_BUTTON = new InlineKeyboardButton("\uD83D\uDCBB Part-time job");
+    private static final InlineKeyboardButton GIFT_BUTTON = new InlineKeyboardButton("\uD83C\uDF81 Gift");
+    private static final InlineKeyboardButton CASHBACK = new InlineKeyboardButton("\uD83D\uDECD️ Cashback");
+    private static final InlineKeyboardButton INVESTMENTS_BUTTON = new InlineKeyboardButton("\uD83D\uDCC8 Investments");
+    private static final InlineKeyboardButton BACK_BUTTON = new InlineKeyboardButton("↩️ Back");
 
 
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {

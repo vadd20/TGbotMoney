@@ -18,11 +18,7 @@ public class Expense {
     private String category;
     private int sum;
 
-    private static final DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm");
-    public String toStringForToday() {
-        return "Expense: " + category + " - " + sum + " - " + date.format(todayFormatter);
-    }
     @Override
     public String toString() {
         return "Expense: " + category + " - " + sum + " - " + date.format(formatter);

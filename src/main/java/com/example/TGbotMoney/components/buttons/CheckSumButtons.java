@@ -7,8 +7,8 @@ import java.util.List;
 
 public class CheckSumButtons {
 
-    private static final InlineKeyboardButton CONTINUE_BUTTON = new InlineKeyboardButton("Continue");
-    private static final InlineKeyboardButton AGAIN_BUTTON = new InlineKeyboardButton("Enter again");
+    private static final InlineKeyboardButton CONTINUE_BUTTON = new InlineKeyboardButton("\uD83D\uDE80 Continue");
+    private static final InlineKeyboardButton AGAIN_BUTTON = new InlineKeyboardButton("\uD83D\uDD04 Enter again");
 
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {
         CONTINUE_BUTTON.setCallbackData("/continueCheckSum");

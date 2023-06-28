@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 public class AddButtons {
-    private static final InlineKeyboardButton EXPENSE_BUTTON = new InlineKeyboardButton("Expense");
-    private static final InlineKeyboardButton INCOME_BUTTON = new InlineKeyboardButton("Income");
+    private static final InlineKeyboardButton EXPENSE_BUTTON = new InlineKeyboardButton("\uD83D\uDCB8 Expense");
+    private static final InlineKeyboardButton INCOME_BUTTON = new InlineKeyboardButton("\uD83D\uDCB0 Income");
 
     public static InlineKeyboardMarkup inlineKeyboardMarkup() {
         EXPENSE_BUTTON.setCallbackData("/addExpense");
